@@ -9,7 +9,10 @@
 /.cursor/
 /.idea
 /.nova
+/.phpintel
+/.php-cs-fixer.cache
 /.phpunit.cache
+/.pnpm-store
 /.vscode
 /.zed
 /auth.json

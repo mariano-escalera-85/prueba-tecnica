@@ -1,5 +1,17 @@
 @import 'tailwindcss';
 
+/* Fonts */
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+/* Bootstrap */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* DataTables */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+@import "datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css";
+@import 'datatables.net-select-bs5/css/select.bootstrap5.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
