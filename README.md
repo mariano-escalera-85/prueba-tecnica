@@ -1,58 +1,72 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Prueba técnica
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Laravel + MySQL + Bootstrap
 
-## About Laravel
+### Tecnologías por utilizar
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   Laravel 6 o superior
+-   Bootstrap
+-   MySQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instrucciones
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. Estados
 
-## Learning Laravel
+Obtener el listado de las 32 entidades federativas utilizando el Servicio Web del Catálogo Único de Claves Geoestadísticas del INEGI.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Endpoint:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+[https://gaia.inegi.org.mx/wscatgeo/v2/mgee/](https://gaia.inegi.org.mx/wscatgeo/v2/mgee/)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Guardar los estados en una tabla llamada  `estados`.
 
-## Agentic Development
+La información almacenada deberá incluir, como mínimo:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+-   Clave del estado, utilizando el campo  `cve_ent`.
+-   Nombre del estado, utilizando el campo  `nomgeo`.
+-   Población total, utilizando el campo  `pob_total`.
 
-```bash
-composer require laravel/boost --dev
+Mostrar los estados en un listado, idealmente utilizando DataTables, con las siguientes columnas:
 
-php artisan boost:install
-```
+-   Clave.
+-   Estado.
+-   Población total.
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+El listado deberá contar con:
 
-## Contributing
+-   Paginación.
+-   Búsqueda.
+-   Ordenamiento.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+La población total deberá mostrarse en un formato legible, incluyendo separadores de miles.
 
-## Code of Conduct
+Ejemplo:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+`798447`  deberá mostrarse como  `798,447`.
 
-## Security Vulnerabilities
+Evitar registros duplicados si se vuelve a ejecutar la carga; es decir, el proceso deberá ser idempotente.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Municipios por estado
 
-## License
+Al dar clic en un estado del listado, consultar sus municipios utilizando el Servicio Web del Catálogo Único de Claves Geoestadísticas del INEGI.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Endpoint:
+
+[https://gaia.inegi.org.mx/wscatgeo/v2/mgem/{CLAVE_ESTADO](https://gaia.inegi.org.mx/wscatgeo/v2/mgem/%7BCLAVE_ESTADO)}
+
+La clave del estado corresponde al campo  `cve_ent`  obtenido en la consulta de entidades federativas.
+
+Ejemplo para Aguascalientes, cuya clave es  `01`:
+
+[https://gaia.inegi.org.mx/wscatgeo/v2/mgem/01](https://gaia.inegi.org.mx/wscatgeo/v2/mgem/01)
+
+Mostrar todos los municipios correspondientes al estado seleccionado.
+
+## Entrega
+
+Responde este correo compartiendo:
+
+-   El enlace al repositorio con el código fuente.
+-   La URL de un despliegue navegable y funcional de la aplicación.
+
+El plazo esperado para realizar la entrega es de siete días hábiles.
