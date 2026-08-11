@@ -33,6 +33,9 @@ $(document).on('click', '#estados-table .load-municipios', function (e) {
             { data: 'nomgeo', name: 'nomgeo', title: 'Municipio', className: 'text-center' },
             { data: 'pob_total', name: 'pob_total', title: 'Población', className: 'text-center' }
         ],
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+        },
         order: [[0, 'asc']],
         paging: true,
         info: false,

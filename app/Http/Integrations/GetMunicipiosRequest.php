@@ -4,7 +4,6 @@ namespace App\Http\Integrations;
 
 use App\Dtos\MunicipioData;
 use App\Http\Integrations\Contracts\ValidatesResponse;
-use App\Http\Integrations\Middlewares\LogResponse;
 use App\Http\Integrations\Middlewares\ValidateResponseData;
 use App\Models\Estado;
 use Illuminate\Http\Request;
@@ -29,16 +28,12 @@ class GetMunicipiosRequest extends SoloRequest implements Cacheable, ValidatesRe
 
     public function __construct(
         Request $request,
-        Estado $estado,
-        LogResponse $responseLogger,
         ValidateResponseData $responseValidator,
         protected LaravelCacheDriver $cacheDriver,
     )
     {
-        dump($request->estado, $request->route('estado'), $estado);
         $this->estado = $request->route('estado');
 
-        $this->middleware()->onResponse($responseLogger);
         $this->middleware()->onResponse($responseValidator);
     }
 
@@ -74,11 +69,17 @@ class GetMunicipiosRequest extends SoloRequest implements Cacheable, ValidatesRe
 
     public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
     {
+        $psrRequest = $response->getPsrRequest();
+        $method = $psrRequest->getMethod();
+        $url = (string) $psrRequest->getUri();
+
         $status = (int) ($response->json('result') ?? $response->status());
         $message = $response->json('mensaje') ?? $response->body();
 
+        $errorMessage = sprintf("%s %s; %s", $method, $url, $message);
+
         return match ($status) {
-            404 => new NotFoundException($response, $message, $status, $senderException),
+            404 => new NotFoundException($response, $errorMessage, $status, $senderException),
             default => $senderException,
         };
     }

@@ -8,28 +8,26 @@ use App\Models\Estado;
 use App\Models\Municipio;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class MunicipiosController extends Controller
 {
-    public function __construct(
-        protected MunicipiosDataTable $dataTable,
-        protected GetMunicipiosRequest $getMunicipiosRequest,
-        Estado $estado,
-    )
-    {
-        dump($estado);
-    }
-
     /**
      * Obtiene todos los Municipios correspondientes al Estado del Servicio Web del Catálogo Único de Claves Geoestadísticas del INEGI.
      * Los actualiza o crea en la Base de Datos
      * Los devuelve como una respuesta AJAX de DataTables
      */
-    public function __invoke(Estado $estado, Municipio $municipio): JsonResponse
+    public function __invoke(
+        Estado $estado,
+        Municipio $municipio,
+        GetMunicipiosRequest $getMunicipiosRequest,
+        MunicipiosDataTable $dataTable
+    ): JsonResponse
     {
-        dump($estado);
-        Cache::remember("municipios.{$estado->cve_ent}", 3600, function () use ($municipio) {
-            $municipios = $this->getMunicipiosRequest->send();
+        Cache::remember("municipios.{$estado->cve_ent}", 3600, function () use ($estado, $municipio, $getMunicipiosRequest) {
+            $municipios = $getMunicipiosRequest->send();
+
+            Log::info("Caching municipios API request for Estado: {$estado->nomgeo} ({$estado->cve_ent})");
 
             return $municipios->dtoOrFail()
                 ->map(fn ($municipioData)
@@ -40,6 +38,6 @@ class MunicipiosController extends Controller
                 );
         });
 
-        return $this->dataTable->with('estado', $estado)->ajax();
+        return $dataTable->with('estado', $estado)->ajax();
     }
 }

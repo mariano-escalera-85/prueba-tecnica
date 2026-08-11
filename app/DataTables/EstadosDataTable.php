@@ -58,6 +58,7 @@ class EstadosDataTable extends DataTable
                     'action'    => 'function (e, dt, node, config) { window.runEstadosClear(dt, node); }'
                 ]),
             ])
+            ->language(['url' => 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'])
             ->addScript('estados.scripts.import_estados')
             ->addScript('estados.scripts.clear_estados')
             ->addScript('estados.scripts.municipios_subtable');
