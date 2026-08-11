@@ -19,8 +19,7 @@ class EstadosDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        return (new EloquentDataTable($query))
-            ->setRowId('id');
+        return datatables()->eloquent($query)->setRowId('id');
     }
 
     /**
@@ -41,7 +40,7 @@ class EstadosDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->orderBy(['cve_ent'])
-             ->layout([
+            ->layout([
                 'topStart' => 'buttons',
                 'topEnd' => 'search',
                 'bottomStart' => 'info',

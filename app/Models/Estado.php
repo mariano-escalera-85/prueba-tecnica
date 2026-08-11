@@ -24,11 +24,10 @@ class Estado extends Model
         return $this->hasMany(Municipio::class, 'cve_ent', 'cve_ent');
     }
 
-
     public function pobTotal(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => $value !== null
+            get: fn (string|null $value) => $value !== null
                 ? number_format($value, 0, '.', ',')
                 : '-',
         );

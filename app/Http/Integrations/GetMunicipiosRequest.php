@@ -3,24 +3,42 @@
 namespace App\Http\Integrations;
 
 use App\Dtos\MunicipioData;
+use App\Http\Integrations\Contracts\ValidatesResponse;
+use App\Http\Integrations\Middlewares\LogResponse;
+use App\Http\Integrations\Middlewares\ValidateResponseData;
 use App\Models\Estado;
-use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
+use Saloon\CachePlugin\Contracts\Cacheable;
+use Saloon\CachePlugin\Contracts\Driver;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
+use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\Enums\Method;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 use Saloon\Http\Response;
 use Saloon\Http\SoloRequest;
 use Throwable;
 
-class GetMunicipiosRequest extends SoloRequest
+class GetMunicipiosRequest extends SoloRequest implements Cacheable, ValidatesResponse
 {
-    public function __construct(private Estado $estado)
-    {
-
-    }
+    use HasCaching;
 
     protected Method $method = Method::GET;
+
+    protected Estado $estado;
+
+    public function __construct(
+        Request $request,
+        LogResponse $responseLogger,
+        ValidateResponseData $responseValidator,
+        protected LaravelCacheDriver $cacheDriver,
+    )
+    {
+        $this->estado = $request->route('estado');
+
+        $this->middleware()->onResponse($responseLogger);
+        $this->middleware()->onResponse($responseValidator);
+    }
 
     public function resolveEndpoint(): string
     {
@@ -39,11 +57,43 @@ class GetMunicipiosRequest extends SoloRequest
 
     public function createDtoFromResponse(Response $response): Collection
     {
-        $data = $response->json();
+        $datos = $response->json('datos');
 
-        $municipios = new Collection();
+        return collect($datos)->map(fn ($data) => MunicipioData::from($data));
+    }
 
-        $validator = Validator::make($data, [
+    /**
+     * It handles request failure when API endpoint returns Status 200 but, actually 404 in body content,
+     */
+    public function hasRequestFailed(Response $response): ?bool
+    {
+        return (int) ($response->json('result') ?? $response->status()) != 200;
+    }
+
+    public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
+    {
+        $status = (int) ($response->json('result') ?? $response->status());
+        $message = $response->json('mensaje') ?? $response->body();
+
+        return match ($status) {
+            404 => new NotFoundException($response, $message, $status, $senderException),
+            default => $senderException,
+        };
+    }
+
+    public function resolveCacheDriver(): Driver
+    {
+        return $this->cacheDriver;
+    }
+
+    public function cacheExpiryInSeconds(): int
+    {
+        return 3600;
+    }
+
+    public function responseRules(): array
+    {
+        return [
             'datos'  => 'required|array',
             'datos.*.cvegeo' => 'sometimes|numeric',
             'datos.*.cve_ent' => 'required|numeric',
@@ -56,41 +106,6 @@ class GetMunicipiosRequest extends SoloRequest
             'datos.*.pob_masculina' => 'sometimes|numeric',
             'datos.*.total_viviendas_habitadas' => 'sometimes|numeric',
             'numReg' => 'sometimes|numeric',
-        ]);
-
-        return $municipios
-            ->when(
-                $validator->passes(),
-                fn ($municipios) => $municipios->merge(Arr::get($data, 'datos')),
-                fn ($municipios) => dd($validator->errors()->all())
-            )
-            ->map(fn ($data) => MunicipioData::from($data));
-    }
-
-    /**
-     * It handles request failure when API endpoint returns Status 200 but, actually 404 in body content,
-     * @param  Response $response [description]
-     * @return boolean            [description]
-     */
-    public function hasRequestFailed(Response $response): ?bool
-    {
-        return (int) ($response->json('result') ?? $response->status()) != 200;
-    }
-
-    /**
-     * [getRequestException description]
-     * @param  Response  $response        [description]
-     * @param  Throwable $senderException [description]
-     * @return [type]                     [description]
-     */
-    public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
-    {
-        $status = (int) ($response->json('result') ?? $response->status());
-        $message = $response->json('mensaje') ?? $response->body();
-
-        return match ($status) {
-            404 => new NotFoundException($response, $message, $status, $senderException),
-            default => $senderException,
-        };
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\EstadosDataTable;
 use App\Http\Integrations\GetEstadosRequest;
 use App\Models\Estado;
+use Illuminate\Http\JsonResponse;
 
 class EstadosController extends Controller
 {
@@ -18,14 +19,14 @@ class EstadosController extends Controller
      * Los Actualiza o Crea en la Base de Datos
      * Devuelve el conteo total de registros recientemente creados
      */
-    public function fetch()
+    public function fetch(GetEstadosRequest $getEstadosRequest, Estado $estado): JsonResponse
     {
-        $estados = new GetEstadosRequest()->send();
+        $estados = $getEstadosRequest->send();
 
         $createdCount = $estados
             ->dtoOrFail()
             ->map(fn ($estadoData)
-                => Estado::updateOrCreate(
+                => $estado->newQuery()->updateOrCreate(
                     $estadoData->only(['cve_ent', 'nomgeo']),
                     $estadoData->except(['cve_ent', 'nomgeo'])
                 )
@@ -37,12 +38,11 @@ class EstadosController extends Controller
     }
 
     /**
-     * Remove the all of the `Estados` and its related `Municipios` at once from storage.
      * Remueve todos los estados con sus correspondientes municipios (por medio de `Cascade on Delete` de la DB)
      */
-    public function destroy()
+    public function destroy(Estado $estado): JsonResponse
     {
-        $deletedCound = Estado::query()->delete();
+        $deletedCound = $estado->newQuery()->delete();
 
         return response()->json(['count' => $deletedCound], 202);
     }

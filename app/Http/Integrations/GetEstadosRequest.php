@@ -3,16 +3,28 @@
 namespace App\Http\Integrations;
 
 use App\Dtos\EstadoData;
-use Illuminate\Support\Arr;
+use App\Http\Integrations\Contracts\ValidatesResponse;
+use App\Http\Integrations\Middlewares\ValidateResponseData;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
+use Saloon\CachePlugin\Contracts\Cacheable;
+use Saloon\CachePlugin\Contracts\Driver;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
+use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\Enums\Method;
 use Saloon\Http\Response;
 use Saloon\Http\SoloRequest;
 
-class GetEstadosRequest extends SoloRequest
+class GetEstadosRequest extends SoloRequest implements Cacheable, ValidatesResponse
 {
+    use HasCaching;
+
     protected Method $method = Method::GET;
+
+    public function __construct(ValidateResponseData $responseValidator)
+    {
+        $this->middleware()->onResponse($responseValidator);
+    }
 
     public function resolveEndpoint(): string
     {
@@ -29,11 +41,24 @@ class GetEstadosRequest extends SoloRequest
 
     public function createDtoFromResponse(Response $response): Collection
     {
-        $data = $response->json();
+        $datos = $response->json('datos');
 
-        $estados = new Collection();
+        return collect($datos)->map(fn ($data) => EstadoData::from($data));
+    }
 
-        $validator = Validator::make($data, [
+    public function resolveCacheDriver(): Driver
+    {
+        return new LaravelCacheDriver(Cache::store());
+    }
+
+    public function cacheExpiryInSeconds(): int
+    {
+        return 3600;
+    }
+
+    public function responseRules(): array
+    {
+        return [
             'datos'  => 'required|array',
             'datos.*.cvegeo' => 'sometimes|numeric',
             'datos.*.cve_ent' => 'required|numeric',
@@ -44,10 +69,6 @@ class GetEstadosRequest extends SoloRequest
             'datos.*.pob_masculina' => 'sometimes|numeric',
             'datos.*.total_viviendas_habitadas' => 'sometimes|numeric',
             'numReg' => 'sometimes|numeric',
-        ]);
-
-        return $estados
-            ->when($validator->passes(), fn ($estados) => $estados->merge(Arr::get($data, 'datos'))
-            ->map(fn ($data) => EstadoData::from($data)));
+        ];
     }
 }

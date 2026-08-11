@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "268e0c2be3e02f398ddcc77d75160abd",
+    "content-hash": "5047ec43674cd0939aa3f1c84a50c19e",
     "packages": [
         {
             "name": "brick/math",
@@ -2318,154 +2318,6 @@
             "time": "2026-08-03T04:09:44+00:00"
         },
         {
-            "name": "lorisleiva/laravel-actions",
-            "version": "v2.10.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lorisleiva/laravel-actions.git",
-                "reference": "40da1bbd3cf115f4e885c197b91777d596c9317a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lorisleiva/laravel-actions/zipball/40da1bbd3cf115f4e885c197b91777d596c9317a",
-                "reference": "40da1bbd3cf115f4e885c197b91777d596c9317a",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/contracts": "^11.0|^12.0|^13.0",
-                "lorisleiva/lody": "^0.7",
-                "php": "^8.2"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^9.0|^10.0|^11.0",
-                "pestphp/pest": "^3.0|^4.0",
-                "phpunit/phpunit": "^11.5|^12.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Action": "Lorisleiva\\Actions\\Facades\\Actions"
-                    },
-                    "providers": [
-                        "Lorisleiva\\Actions\\ActionServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Lorisleiva\\Actions\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Loris Leiva",
-                    "email": "loris.leiva@gmail.com",
-                    "homepage": "https://lorisleiva.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Laravel components that take care of one specific task",
-            "homepage": "https://github.com/lorisleiva/laravel-actions",
-            "keywords": [
-                "action",
-                "command",
-                "component",
-                "controller",
-                "job",
-                "laravel",
-                "listener",
-                "object"
-            ],
-            "support": {
-                "issues": "https://github.com/lorisleiva/laravel-actions/issues",
-                "source": "https://github.com/lorisleiva/laravel-actions/tree/v2.10.2"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/lorisleiva",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-07-26T11:03:26+00:00"
-        },
-        {
-            "name": "lorisleiva/lody",
-            "version": "v0.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lorisleiva/lody.git",
-                "reference": "82ecb6faa55fb20109e6959f42f0f652cd77674b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lorisleiva/lody/zipball/82ecb6faa55fb20109e6959f42f0f652cd77674b",
-                "reference": "82ecb6faa55fb20109e6959f42f0f652cd77674b",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/contracts": "^11.0|^12.0|^13.0",
-                "php": "^8.2"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^9.0|^10.0|^11.0",
-                "pestphp/pest": "^3.0|^4.0",
-                "phpunit/phpunit": "^11.5|^12.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Lody": "Lorisleiva\\Lody\\Lody"
-                    },
-                    "providers": [
-                        "Lorisleiva\\Lody\\LodyServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Lorisleiva\\Lody\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Loris Leiva",
-                    "email": "loris.leiva@gmail.com",
-                    "homepage": "https://lorisleiva.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Load files and classes as lazy collections in Laravel.",
-            "homepage": "https://github.com/lorisleiva/lody",
-            "keywords": [
-                "classes",
-                "collection",
-                "files",
-                "laravel",
-                "load"
-            ],
-            "support": {
-                "issues": "https://github.com/lorisleiva/lody/issues",
-                "source": "https://github.com/lorisleiva/lody/tree/v0.7.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/lorisleiva",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-03-18T12:49:31+00:00"
-        },
-        {
             "name": "maennchen/zipstream-php",
             "version": "3.2.2",
             "source": {
@@ -4125,6 +3977,54 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.3"
             },
             "time": "2026-06-18T03:57:49+00:00"
+        },
+        {
+            "name": "saloonphp/cache-plugin",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/saloonphp/cache-plugin.git",
+                "reference": "106d89b6645aa1c054f9687ef8b1eb2ef0b44c47"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/saloonphp/cache-plugin/zipball/106d89b6645aa1c054f9687ef8b1eb2ef0b44c47",
+                "reference": "106d89b6645aa1c054f9687ef8b1eb2ef0b44c47",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "saloonphp/saloon": "^3.0 || ^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "league/flysystem": "^3.12.2",
+                "orchestra/testbench": "^9.15 || ^10.7",
+                "pestphp/pest": "^2.3 || ^4.0",
+                "psr/simple-cache": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Saloon\\CachePlugin\\": "src/",
+                    "Saloon\\CachePlugin\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sammyjo20",
+                    "email": "29132017+Sammyjo20@users.noreply.github.com"
+                }
+            ],
+            "description": "Official plugin for caching Saloon responses",
+            "support": {
+                "source": "https://github.com/saloonphp/cache-plugin/tree/v3.1.0"
+            },
+            "time": "2026-03-25T20:44:39+00:00"
         },
         {
             "name": "saloonphp/saloon",
