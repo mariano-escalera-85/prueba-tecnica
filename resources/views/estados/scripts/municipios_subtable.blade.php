@@ -34,8 +34,8 @@ $(document).on('click', '#estados-table .load-municipios', function (e) {
             { data: 'pob_total', name: 'pob_total', title: 'Población', className: 'text-center' }
         ],
         order: [[0, 'asc']],
-        paging: false,
+        paging: true,
         info: false,
-        searching: false
+        searching: true
     });
 });

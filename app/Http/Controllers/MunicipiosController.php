@@ -14,9 +14,10 @@ class MunicipiosController extends Controller
     public function __construct(
         protected MunicipiosDataTable $dataTable,
         protected GetMunicipiosRequest $getMunicipiosRequest,
+        Estado $estado,
     )
     {
-
+        dump($estado);
     }
 
     /**
@@ -26,6 +27,7 @@ class MunicipiosController extends Controller
      */
     public function __invoke(Estado $estado, Municipio $municipio): JsonResponse
     {
+        dump($estado);
         Cache::remember("municipios.{$estado->cve_ent}", 3600, function () use ($municipio) {
             $municipios = $this->getMunicipiosRequest->send();
 

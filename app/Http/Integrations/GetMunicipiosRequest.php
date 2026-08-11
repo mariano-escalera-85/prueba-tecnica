@@ -29,11 +29,13 @@ class GetMunicipiosRequest extends SoloRequest implements Cacheable, ValidatesRe
 
     public function __construct(
         Request $request,
+        Estado $estado,
         LogResponse $responseLogger,
         ValidateResponseData $responseValidator,
         protected LaravelCacheDriver $cacheDriver,
     )
     {
+        dump($request->estado, $request->route('estado'), $estado);
         $this->estado = $request->route('estado');
 
         $this->middleware()->onResponse($responseLogger);
