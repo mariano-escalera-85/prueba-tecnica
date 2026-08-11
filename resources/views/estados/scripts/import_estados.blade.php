@@ -4,8 +4,8 @@ window.runEstadosImport = function (dt, button) {
     button.prop("disabled", true);
 
     $.ajax({
-        url: "/api/estados",
-        type: "POST",
+        url: "/api/estados/fetch",
+        type: "GET",
         success: function(response) {
             alert(`${response.count || 0} registros nuevos importados.`);
             dt.ajax.reload(null, false);

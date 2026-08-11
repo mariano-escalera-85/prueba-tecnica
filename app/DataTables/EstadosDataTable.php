@@ -20,9 +20,6 @@ class EstadosDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('pob_total', function (Estado $estado) {
-                return number_format($estado->pob_total, 0, '.', ',');
-            })
             ->setRowId('id');
     }
 
@@ -37,9 +34,6 @@ class EstadosDataTable extends DataTable
             ->select('id', 'cve_ent', 'nomgeo', 'pob_total');
     }
 
-    /**
-     * Optional method if you want to use the html builder.
-     */
     public function html(): HtmlBuilder
     {
         return $this->builder()
@@ -47,7 +41,6 @@ class EstadosDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->orderBy(['cve_ent'])
-            // ->selectStyleSingle()
              ->layout([
                 'topStart' => 'buttons',
                 'topEnd' => 'search',
@@ -67,7 +60,8 @@ class EstadosDataTable extends DataTable
                 ]),
             ])
             ->addScript('estados.scripts.import_estados')
-            ->addScript('estados.scripts.clear_estados');
+            ->addScript('estados.scripts.clear_estados')
+            ->addScript('estados.scripts.municipios_subtable');
     }
 
     /**
@@ -79,14 +73,10 @@ class EstadosDataTable extends DataTable
             Column::make('cve_ent')->addClass('text-center')->title('Clave'),
             Column::make('nomgeo')->addClass('text-center')->title('Estado'),
             Column::make('pob_total')->addClass('text-center')->title('Población Total'),
+            Column::computed('municipios') // Use computed for action/HTML columns
+                ->defaultContent('<button class="btn btn-sm btn-info load-municipios">Municipios</button>')
+                ->addClass('text-center')
+                ->title('Municipios'),
         ];
     }
-
-    /**
-     * Get the filename for export.
-     */
-    // protected function filename(): string
-    // {
-    //     return 'Estados_' . date('YmdHis');
-    // }
 }

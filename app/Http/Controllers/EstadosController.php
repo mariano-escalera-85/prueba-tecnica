@@ -14,9 +14,11 @@ class EstadosController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Obtiene los estados del Servicio Web del Catálogo Único de Claves Geoestadísticas del INEGI.
+     * Los Actualiza o Crea en la Base de Datos
+     * Devuelve el conteo total de registros recientemente creados
      */
-    public function store()
+    public function fetch()
     {
         $estados = new GetEstadosRequest()->send();
 
@@ -31,16 +33,17 @@ class EstadosController extends Controller
             ->filter(fn ($estado) => $estado->wasRecentlyCreated)
             ->count();
 
-        return ['count' => $createdCount];
+        return response()->json(['count' => $createdCount], 201);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the all of the `Estados` and its related `Municipios` at once from storage.
+     * Remueve todos los estados con sus correspondientes municipios (por medio de `Cascade on Delete` de la DB)
      */
-    public function destroyAll()
+    public function destroy()
     {
         $deletedCound = Estado::query()->delete();
 
-        return ['count' => $deletedCound];
+        return response()->json(['count' => $deletedCound], 202);
     }
 }

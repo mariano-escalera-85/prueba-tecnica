@@ -11,18 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('estados', function (Blueprint $table) {
+        Schema::create('municipios', function (Blueprint $table) {
             $table->id();
 
-            $table->string('cvegeo');
-            $table->string('cve_ent')->unique();
+            $table->string('cvegeo')->unique();
+            $table->string('cve_ent');
+            $table->string('cve_mun');
             $table->string('nomgeo');
-            $table->string('nom_abrev')->nullable()->default(null);
-
-            $table->integer('pob_total');
+            $table->string('cve_cab');
+            $table->string('nom_cab')->nullable()->default(null);
+            $table->integer('pob_total')->nullable()->default(null);
             $table->integer('pob_femenina')->nullable()->default(null);
             $table->integer('pob_masculina')->nullable()->default(null);
             $table->integer('total_viviendas_habitadas')->nullable()->default(null);
+
+            $table->unique(['cve_ent', 'cve_mun'], 'cvegeo_compound_unique');
+
+            $table->foreign('cve_ent')->references('cve_ent')->on('estados')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -33,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('estados');
+        Schema::dropIfExists('municipios');
     }
 };

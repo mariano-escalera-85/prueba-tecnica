@@ -2,28 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Estado extends Model
+class Municipio extends Model
 {
     protected $fillable = [
         'cvegeo',
         'cve_ent',
+        "cve_mun",
         'nomgeo',
-        'nom_abrev',
+        'cve_cab',
+        'nom_cab',
         'pob_total',
         'pob_femenina',
         'pob_masculina',
         'total_viviendas_habitadas',
     ];
 
-    public function municipios(): HasMany
+    public function estado(): BelongsTo
     {
-        return $this->hasMany(Municipio::class, 'cve_ent', 'cve_ent');
+        return $this->belongsTo(Estado::class, 'cve_ent', 'cve_ent');
     }
-
 
     public function pobTotal(): Attribute
     {

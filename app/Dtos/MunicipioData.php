@@ -2,14 +2,16 @@
 
 namespace App\Dtos;
 
-class EstadoData extends Data
+class MunicipioData extends Data
 {
     public function __construct(
+        public readonly string $cvegeo,
         public readonly string $cve_ent,
+        public readonly string $cve_mun,
         public readonly string $nomgeo,
-        public readonly int $pob_total,
-        public readonly string|null $cvegeo = null,
-        public readonly string|null $nom_abrev = null,
+        public readonly string $cve_cab,
+        public readonly string|null $nom_cab = null,
+        public readonly int|null $pob_total = null,
         public readonly int|null $pob_femenina = null,
         public readonly int|null $pob_masculina = null,
         public readonly int|null $total_viviendas_habitadas = null,
