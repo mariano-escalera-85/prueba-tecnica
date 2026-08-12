@@ -1,19 +1,4 @@
 services:
-  caddy:
-    image: caddy:2-alpine
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - prod-network
-    depends_on:
-      - app
-
   app:
     build:
       context: .
@@ -21,7 +6,7 @@ services:
     image: laravel-prod-app
     restart: always
     ports:
-      - "80:8080" # The base image runs Nginx on 8080 internally
+      - "80:8080" # Maps host port 80 to container Nginx on port 8080
     env_file:
       - .env
     environment:
@@ -62,8 +47,4 @@ volumes:
   prod-mysql:
     driver: local
   prod-redis:
-    driver: local
-  caddy_data:
-    driver: local
-  caddy_config:
     driver: local
