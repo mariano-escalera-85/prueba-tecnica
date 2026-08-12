@@ -17,8 +17,18 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring
 
-      - name: Install Dependencies
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install PHP Dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Install & Build Frontend Assets
+        run: |
+          npm ci || npm install
+          npm run build
 
       - name: Prepare Environment
         run: |
