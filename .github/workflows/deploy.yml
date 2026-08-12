@@ -14,11 +14,11 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring
 
       - name: Install Dependencies
-        run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Prepare Environment
         run: |
@@ -29,6 +29,7 @@ jobs:
         run: php artisan test
 
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Execute Deployment Commands via SSH
@@ -37,8 +38,9 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_PASSPHRASE }}
           script: |
-            cd /var/www/my-project
+            cd /var/www/enegence
 
             # 1. Put application in maintenance mode (fails silently on first run)
             docker compose -f docker-compose.prod.yml exec -T app php artisan down || true
@@ -57,3 +59,4 @@ jobs:
 
             # 6. Bring application back online
             docker compose -f docker-compose.prod.yml exec -T app php artisan up
+
