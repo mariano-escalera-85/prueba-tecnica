@@ -72,10 +72,28 @@ Responde este correo compartiendo:
 El plazo esperado para realizar la entrega es de siete días hábiles.
 
 
-# Configuració del ambiente de desarrollo
+# Configuración del ambiente de desarrollo
 
 - Agrega la siguiente linea a tu `/etc/hosts`
     - `127.0.0.1 enegence.local`
-- Ejecuta:
+- Configura el certificado local:
     - `./bin/setup-ssl.sh.`
+- Instala las dependencias de PHP usando un contenedor temporal
+    - `docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs`
+- Copy the `.env.example` to `.env`
+    - `cp .env.example .env`
+- Construye y arranca el ambiente de desarrollo
     - `sail up -d`
+- Genera la llave de la aplicación:
+    - `./vendor/bin/sail artisan key:generate`
+- Instala las dependencias
+    - `sail composer install`
+- Ejecuta las migraciones a la base de datos
+    - `sail art migrate`
+- Construye los assets de frontend para desarrollo
+    - `sail pnpm run dev`
+- Visita la dirección configurada
+    - `https://enegence.local`
