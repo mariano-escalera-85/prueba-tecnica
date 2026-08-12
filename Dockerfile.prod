@@ -1,8 +1,9 @@
 FROM serversideup/php:8.4-fpm-nginx-alpine
 
 USER root
-# Install Node.js for Vite asset compilation
-RUN apk add --no-cache nodejs npm
+# Install GD extension and Node.js for Vite asset compilation
+RUN install-php-extensions gd \
+    && apk add --no-cache nodejs npm
 
 USER www-data
 # Copy your application files into the image
