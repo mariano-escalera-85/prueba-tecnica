@@ -1,0 +1,69 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - prod-network
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: laravel-prod-app
+    restart: always
+    ports:
+      - "80:8080" # The base image runs Nginx on 8080 internally
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=mysql
+      - REDIS_HOST=redis
+    networks:
+      - prod-network
+    depends_on:
+      - mysql
+      - redis
+
+  mysql:
+    image: 'mysql:8.4'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+    volumes:
+      - 'prod-mysql:/var/lib/mysql'
+    networks:
+      - prod-network
+
+  redis:
+    image: 'redis:alpine'
+    restart: always
+    volumes:
+      - 'prod-redis:/data'
+    networks:
+      - prod-network
+
+networks:
+  prod-network:
+    driver: bridge
+
+volumes:
+  prod-mysql:
+    driver: local
+  prod-redis:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local

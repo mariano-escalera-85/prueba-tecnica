@@ -1,0 +1,18 @@
+FROM serversideup/php:8.5-web
+
+USER root
+# Install Node.js for Vite asset compilation
+RUN apk add --no-cache nodejs npm
+
+USER www-data
+# Copy your application files into the image
+COPY --chown=www-data:www-data . /var/www/html
+
+# Install PHP dependencies (ignoring dev packages)
+RUN composer install --no-dev --optimize-autoloader
+
+# Compile frontend assets
+RUN npm install && npm run build
+
+# Cache Laravel configurations for performance
+RUN php artisan optimize
