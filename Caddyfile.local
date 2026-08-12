@@ -1,0 +1,4 @@
+enegence.local {
+    tls /etc/caddy/certs/enegence.local.crt /etc/caddy/certs/enegence.local.key
+    reverse_proxy laravel.test:80
+}

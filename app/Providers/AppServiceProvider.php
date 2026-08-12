@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
 
@@ -23,8 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app->environment() !== 'local' || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-            URL::forceScheme('https');
-        }
+        //
     }
 }

@@ -70,3 +70,12 @@ Responde este correo compartiendo:
 -   La URL de un despliegue navegable y funcional de la aplicación.
 
 El plazo esperado para realizar la entrega es de siete días hábiles.
+
+
+# Configuració del ambiente de desarrollo
+
+- Agrega la siguiente linea a tu `/etc/hosts`
+    - `127.0.0.1 enegence.local`
+- Ejecuta:
+    - `./bin/setup-ssl.sh.`
+    - `sail up -d`
