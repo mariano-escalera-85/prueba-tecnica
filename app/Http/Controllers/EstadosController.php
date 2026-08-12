@@ -9,9 +9,9 @@ use Illuminate\Http\JsonResponse;
 
 class EstadosController extends Controller
 {
-    public function index(EstadosDataTable $dataTable)
+    public function index(EstadosDataTable $dataTable): JsonResponse
     {
-        return $dataTable->render('estados.index');
+        return $dataTable->ajax();
     }
 
     /**
@@ -19,22 +19,27 @@ class EstadosController extends Controller
      * Los Actualiza o Crea en la Base de Datos
      * Devuelve el conteo total de registros recientemente creados
      */
-    public function fetch(GetEstadosRequest $getEstadosRequest, Estado $estado): JsonResponse
+    public function fetch(
+        GetEstadosRequest $getEstadosRequest,
+        Estado $estado
+    ): JsonResponse
     {
-        $estados = $getEstadosRequest->send();
+        if(!$estado->newQuery()->exists()){
+            $estados = $getEstadosRequest->send();
 
-        $createdCount = $estados
-            ->dtoOrFail()
-            ->map(fn ($estadoData)
-                => $estado->newQuery()->updateOrCreate(
-                    $estadoData->only(['cve_ent', 'nomgeo']),
-                    $estadoData->except(['cve_ent', 'nomgeo'])
+            $createdCount = $estados
+                ->dtoOrFail()
+                ->map(fn ($estadoData)
+                    => $estado->newQuery()->updateOrCreate(
+                        $estadoData->only(['cve_ent', 'nomgeo']),
+                        $estadoData->except(['cve_ent', 'nomgeo'])
+                    )
                 )
-            )
-            ->filter(fn ($estado) => $estado->wasRecentlyCreated)
-            ->count();
+                ->filter(fn ($estado) => $estado->wasRecentlyCreated)
+                ->count();
+        }
 
-        return response()->json(['count' => $createdCount], 201);
+        return response()->json(['count' => $createdCount ?? 0], 201);
     }
 
     /**

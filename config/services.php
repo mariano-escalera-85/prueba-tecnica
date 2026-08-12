@@ -34,12 +34,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
-    'gaia' => [
-        'requests' => [
-            'estados' => env('GAIA_ESTADOS_ENDPOINT', 'https://gaia.inegi.org.mx/wscatgeo/v2/mgee/'),
-            'municipios' => env('GAIA_MUNICIPIOS_ENDPOINT', 'https://gaia.inegi.org.mx/wscatgeo/v2/mgem/{cve_ent}'),
-        ]
-    ]
-
 ];

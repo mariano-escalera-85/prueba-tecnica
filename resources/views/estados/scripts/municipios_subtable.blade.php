@@ -26,8 +26,10 @@ $(document).on('click', '#estados-table .load-municipios', function (e) {
     $(`#${childTableId}`).DataTable({
         processing: true,
         serverSide: true,
-        // Make a GET request to fetch the subtable data
-        ajax: `/api/estados/${rowData.id}/municipios`,
+        ajax: {
+            url: `/api/estados/${rowData.id}/municipios`,
+            type: 'GET',
+        },
         columns: [
             { data: 'cve_mun', name: 'cve_mun', title: 'Clave Mun.', className: 'text-center' },
             { data: 'nomgeo', name: 'nomgeo', title: 'Municipio', className: 'text-center' },

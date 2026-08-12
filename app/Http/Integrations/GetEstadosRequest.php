@@ -28,7 +28,7 @@ class GetEstadosRequest extends SoloRequest implements Cacheable, ValidatesRespo
 
     public function resolveEndpoint(): string
     {
-        return config('services.gaia.requests.estados');
+        return config('gaia.estados.endpoint');
     }
 
     protected function defaultHeaders(): array

@@ -39,7 +39,7 @@ class GetMunicipiosRequest extends SoloRequest implements Cacheable, ValidatesRe
 
     public function resolveEndpoint(): string
     {
-        $endpoint = config('services.gaia.requests.municipios');
+        $endpoint = config('gaia.municipios.endpoint');
 
         return str_replace('{cve_ent}', $this->estado->cve_ent, $endpoint);
     }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\EstadosController;
+use App\DataTables\EstadosDataTable;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/estados', [EstadosController::class, 'index'])->name('estados.index');
-
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('/estados', function (EstadosDataTable $dataTable) {
+    return $dataTable->render('estados.index');
+})->name('estados.index')->middleware('auth:web');
