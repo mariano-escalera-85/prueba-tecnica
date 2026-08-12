@@ -102,7 +102,7 @@ class GetMunicipiosRequest extends SoloRequest implements Cacheable, ValidatesRe
             'datos.*.cve_ent' => 'required|numeric',
             'datos.*.cve_mun' => 'required|numeric',
             'datos.*.nomgeo' => 'required',
-            'datos.*.cve_cab' => 'sometimes|numeric',
+            'datos.*.cve_cab' => 'sometimes',
             'datos.*.nom_cab' => 'sometimes',
             'datos.*.pob_total' => 'sometimes|numeric',
             'datos.*.pob_femenina' => 'sometimes|numeric',

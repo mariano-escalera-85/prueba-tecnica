@@ -16,7 +16,13 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
  // ->use(RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
+
+uses()->afterEach(function () {
+    if (class_exists(\Saloon\Http\Faking\MockClient::class)) {
+        \Saloon\Http\Faking\MockClient::destroyGlobal();
+    }
+})->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------

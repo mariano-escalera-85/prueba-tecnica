@@ -3,9 +3,9 @@
 namespace App\Http\Integrations\Middlewares;
 
 use App\Http\Integrations\Contracts\ValidatesResponse;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use RuntimeException;
 use Saloon\Http\Response;
 
 class ValidateResponseData
@@ -37,7 +37,7 @@ class ValidateResponseData
                 'errors' => $errors,
             ]);
 
-            throw new RuntimeException('API Response Validation Failed: ' . implode(', ', $errors));
+            throw new ValidationException($validator, 'API Response Validation Failed.', $errors);
         }
     }
 }

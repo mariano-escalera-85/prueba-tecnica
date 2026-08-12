@@ -19,7 +19,11 @@ class EstadosDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        return datatables()->eloquent($query)->setRowId('id');
+        return datatables()
+            ->eloquent($query)
+            ->setRowClass('load-municipios')
+            ->setRowAttr(['role' => 'button'])
+            ->setRowId('id');
     }
 
     /**
@@ -73,10 +77,6 @@ class EstadosDataTable extends DataTable
             Column::make('cve_ent')->addClass('text-center')->title('Clave'),
             Column::make('nomgeo')->addClass('text-center')->title('Estado'),
             Column::make('pob_total')->addClass('text-center')->title('Población Total'),
-            Column::computed('municipios') // Use computed for action/HTML columns
-                ->defaultContent('<button class="btn btn-sm btn-info load-municipios">Municipios</button>')
-                ->addClass('text-center')
-                ->title('Municipios'),
         ];
     }
 }
