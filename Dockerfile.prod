@@ -1,4 +1,4 @@
-FROM serversideup/php:8.5-web
+FROM serversideup/php:8.4-fpm-nginx-alpine
 
 USER root
 # Install Node.js for Vite asset compilation
